@@ -3,6 +3,8 @@ package com.app.school.controller;
 import com.app.school.model.Contact;
 import com.app.school.service.ContactService;
 import jakarta.validation.Valid;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.ModelAndView;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -43,11 +46,15 @@ public class ContactController {
     }*/
 
     @RequestMapping(value = "/saveMsg",method = POST)
-    public ModelAndView saveMessage(@Valid @ModelAttribute("contact") Contact contact, Errors errors) {
+    public String saveMessage(@Valid @ModelAttribute("contact") Contact contact, Errors errors) {
         if (errors.hasErrors()) {
-            log.error("Contact form validation failed due to : " + errors.toString());
+            log.error("Contact form validation failed due to : {}", errors.toString());
+            return "contact.html";
         }
         contactService.saveMessageDetails(contact);
-        return new ModelAndView("redirect:/contact");
+        contactService.setCounter(contactService.getCounter() + 1);
+        log.info("Number of times the Contact form is submitted : {}", contactService.getCounter());
+        return "redirect:/contact";
     }
+
 }
