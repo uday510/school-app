@@ -6,15 +6,19 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.web.context.annotation.SessionScope;
 
+//@RequestScope // every request will have a new instance of this bean
+//@SessionScope // Same bean instance will be shared across all the requests in the same session
+//@ApplicationScope // Same bean instance will be shared across all the requests
 @Service
-@RequestScope
 public class ContactService {
 
-    @Setter
-    @Getter
-    private int counter = 0;
+//    @Setter
+//    @Getter
+//    private int counter = 0;
 
     public ContactService() {
         log.info("Contact Service Bean initialized");
@@ -28,4 +32,5 @@ public class ContactService {
         log.info(contact.toString());
         return isSaved;
     }
+
 }
