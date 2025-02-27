@@ -33,8 +33,7 @@ public class SecurityConfig {
                 )
 //                .formLogin(withDefaults()) // default login form
                 .formLogin(form -> form
-                        .loginPage("/login").defaultSuccessUrl("/dashboard").permitAll()
-                        .failureUrl("/login?error=true").permitAll())
+                        .loginPage("/login").defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll())
                         .logout(logout -> logout.logoutSuccessUrl("/login?logout=true")
                                 .invalidateHttpSession(true).permitAll())
                 .httpBasic(withDefaults())
