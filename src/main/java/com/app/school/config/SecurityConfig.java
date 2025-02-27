@@ -19,7 +19,8 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable) // disable CSRF
+//                .csrf(AbstractHttpConfigurer::disable) // disable CSRF
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg")) // disable CSRF for /saveMsg
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/dashboard").authenticated()
                         .requestMatchers( "/", "/home").permitAll()
@@ -34,7 +35,8 @@ public class SecurityConfig {
 //                .formLogin(withDefaults()) // default login form
                 .formLogin(form -> form
                         .loginPage("/login").defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll())
-                        .logout(logout -> logout.logoutSuccessUrl("/login?logout=true")
+                        .logout(logout -> logout.logoutUrl("/logout")
+                                .logoutSuccessUrl("/login?logout=true")
                                 .invalidateHttpSession(true).permitAll())
                 .httpBasic(withDefaults())
                 .build();
