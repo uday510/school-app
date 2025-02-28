@@ -1,5 +1,6 @@
 package com.app.school.config;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +21,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
 //                .csrf(AbstractHttpConfigurer::disable) // disable CSRF
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg")) // disable CSRF for /saveMsg
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg").ignoringRequestMatchers(PathRequest.toH2Console())) // disable CSRF for /saveMsg
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/dashboard").authenticated()
                         .requestMatchers( "/", "/home").permitAll()
@@ -31,6 +32,8 @@ public class SecurityConfig {
                         .requestMatchers("/about").permitAll()
                         .requestMatchers("/assets/**").permitAll() // allow all static resources
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/logout").permitAll()
+                        .requestMatchers(PathRequest.toH2Console()).permitAll()
                 )
 //                .formLogin(withDefaults()) // default login form
                 .formLogin(form -> form
@@ -39,6 +42,7 @@ public class SecurityConfig {
                                 .logoutSuccessUrl("/login?logout=true")
                                 .invalidateHttpSession(true).permitAll())
                 .httpBasic(withDefaults())
+                .headers(AbstractHttpConfigurer::disable)
                 .build();
 
         // deny all requests
