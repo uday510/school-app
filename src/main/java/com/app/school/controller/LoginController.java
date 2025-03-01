@@ -18,15 +18,17 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
     public String displayLoginPage(@RequestParam(value = "error", required = false) String error,
-                                   @RequestParam(value = "logout", required = false) String logout, Model model) {
+                                   @RequestParam(value = "logout", required = false) String logout,
+                                   @RequestParam(value = "register", required = false) String register,
+                                   Model model) {
 
         String errMsg = null;
         if (error != null) {
             errMsg = "Invalid username and password!";
         } else if (logout != null) {
             errMsg = "You have been successfully logged out!";
-        } else {
-            errMsg = "";
+        } else if (register != null) {
+            errMsg = "Registration successful! Please login to continue!";
         }
 
         model.addAttribute("errMsg", errMsg);
@@ -41,7 +43,6 @@ public class LoginController {
             // If the authentication is not null, then logout, remove the authentication from the SecurityContext and invalidate the session
             new SecurityContextLogoutHandler().logout(httpServletRequest, httpServletResponse, authentication);
         }
-
         return "redirect:/login?logout=true";
     }
 }

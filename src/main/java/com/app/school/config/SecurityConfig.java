@@ -1,10 +1,8 @@
 package com.app.school.config;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,9 +18,11 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-//                .csrf(AbstractHttpConfigurer::disable) // disable CSRF
-//                .csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg").ignoringRequestMatchers(PathRequest.toH2Console())) // disable CSRF for /saveMsg
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg")) // disable CSRF for /saveMsg
+                .csrf(csrf ->
+                                csrf
+                                .ignoringRequestMatchers("/saveMsg")
+                                .ignoringRequestMatchers("/public/**")
+                )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/dashboard").authenticated()
                         .requestMatchers("/displayMessages").hasRole("ADMIN")
@@ -36,35 +36,16 @@ public class SecurityConfig {
                         .requestMatchers("/assets/**").permitAll() // allow all static resources
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logout").permitAll()
-//                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+                        .requestMatchers("/public/**").permitAll()
                 )
-//                .formLogin(withDefaults()) // default login form
                 .formLogin(form -> form
-                        .loginPage("/login").defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll())
+                        .loginPage("/login").defaultSuccessUrl("/dashboard")
+                        .failureUrl("/login?error=true").permitAll())
                         .logout(logout -> logout.logoutUrl("/logout")
                                 .logoutSuccessUrl("/login?logout=true")
                                 .invalidateHttpSession(true).permitAll())
                 .httpBasic(withDefaults())
-//                .headers(AbstractHttpConfigurer::disable)
                 .build();
-
-        // deny all requests
-/*         return http
-                 .authorizeHttpRequests(authorize -> authorize
-                         .anyRequest().denyAll()
-                 )
-                 .formLogin(withDefaults())
-                 .httpBasic(withDefaults())
-                 .build();*/
-
-        // accept all requests
-/*         return http
-                 .authorizeHttpRequests(authorize -> authorize
-                         .anyRequest().permitAll()
-                 )
-                 .formLogin(withDefaults())
-                 .httpBasic(withDefaults())
-                 .build();*/
     }
 
     @Bean
