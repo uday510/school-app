@@ -8,19 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-/*@RequestScope // every request will have a new instance of this bean
-@SessionScope // Same bean instance will be shared across all the requests in the same session
-@ApplicationScope // Same bean instance will be shared across all the requests*/
+
 @Service
 public class ContactService {
-
-/*    @Setter
-    @Getter
-    private int counter = 0;*/
 
     @Autowired
     private ContactRepository contactRepository;
@@ -32,19 +25,20 @@ public class ContactService {
     private static final Logger log = LoggerFactory.getLogger(ContactService.class);
 
     public List<Contact> findMsgsWithOpenStatus() {
-        return contactRepository.findMsgsWithStatus(SchoolConstants.OPEN);
+        return contactRepository.findByStatus(SchoolConstants.OPEN);
     }
 
-    public boolean saveMessageDetails(Contact contact) {
+    public void saveMessageDetails(Contact contact) {
         contact.setStatus(SchoolConstants.OPEN);
-        contact.setCreatedBy(SchoolConstants.ANONYMOUS);
-        contact.setCreatedAt(LocalDateTime.now());
-        int result = contactRepository.saveContactMsg(contact);
-        return result > 0;
+        contactRepository.save(contact);
     }
 
-    public boolean updateMsgStatus(int contactId, String updatedBy) {
-        int result = contactRepository.updateMgStatus(contactId, SchoolConstants.CLOSE, updatedBy);
-        return result > 0;
+    public void updateMsgStatus(int id) {
+        Optional<Contact> contact = contactRepository.findById(id);
+        if (contact.isEmpty()) return;
+
+        Contact contact1 = contact.get();
+        contact1.setStatus(SchoolConstants.CLOSE);
+        contactRepository.save(contact1);
     }
 }
