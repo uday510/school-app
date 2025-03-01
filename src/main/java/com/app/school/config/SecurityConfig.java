@@ -21,7 +21,8 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
 //                .csrf(AbstractHttpConfigurer::disable) // disable CSRF
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg").ignoringRequestMatchers(PathRequest.toH2Console())) // disable CSRF for /saveMsg
+//                .csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg").ignoringRequestMatchers(PathRequest.toH2Console())) // disable CSRF for /saveMsg
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/saveMsg")) // disable CSRF for /saveMsg
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/dashboard").authenticated()
                         .requestMatchers("/displayMessages").hasRole("ADMIN")
@@ -35,7 +36,7 @@ public class SecurityConfig {
                         .requestMatchers("/assets/**").permitAll() // allow all static resources
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/logout").permitAll()
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+//                        .requestMatchers(PathRequest.toH2Console()).permitAll()
                 )
 //                .formLogin(withDefaults()) // default login form
                 .formLogin(form -> form
@@ -44,7 +45,7 @@ public class SecurityConfig {
                                 .logoutSuccessUrl("/login?logout=true")
                                 .invalidateHttpSession(true).permitAll())
                 .httpBasic(withDefaults())
-                .headers(AbstractHttpConfigurer::disable)
+//                .headers(AbstractHttpConfigurer::disable)
                 .build();
 
         // deny all requests

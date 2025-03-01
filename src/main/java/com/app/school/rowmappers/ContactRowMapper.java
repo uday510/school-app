@@ -1,6 +1,5 @@
 package com.app.school.rowmappers;
 
-
 import com.app.school.model.Contact;
 import org.springframework.jdbc.core.RowMapper;
 
