@@ -39,9 +39,8 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 
         if (password != null &&
                passwordEncoder.matches(password, person.getPassword())) {
-            var result =  new UsernamePasswordAuthenticationToken(
-                    person.getName(), null, getGrantedAuthorities(person.getRoles()));
-            return result;
+            return new UsernamePasswordAuthenticationToken(
+                    email, null, getGrantedAuthorities(person.getRoles()));
         }
 
         throw new BadCredentialsException("Invalid Credentials");
