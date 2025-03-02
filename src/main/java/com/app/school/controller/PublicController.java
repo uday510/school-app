@@ -1,6 +1,7 @@
 package com.app.school.controller;
 
 import com.app.school.model.Person;
+import com.app.school.service.PersonService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("public")
 public class PublicController {
 
-//    @Autowired
-//    PersonService personService;
+    @Autowired
+    PersonService personService;
 
     @RequestMapping(value = "/register", method = { RequestMethod.GET })
     public String displayRegister(Model model) {
@@ -27,6 +28,13 @@ public class PublicController {
 
     @RequestMapping(value = "/createUser", method = { RequestMethod.POST })
     public String createUser(@Valid @ModelAttribute("person") Person person, Errors errors) {
-        return errors.hasErrors() ? "register.html" : "redirect:/login?register=true";
+
+        if (errors.hasErrors()) {
+            return "register.html";
+        }
+
+        personService.createNewPerson(person);
+
+        return "redirect:/login?register=true";
     }
 }
