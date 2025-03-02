@@ -21,3 +21,7 @@ VALUES (' Sep 5 ','Labor Day','FEDERAL',CURDATE(),'DBA');
 
 INSERT INTO `holidays` (`day`,`reason`,`type`,`created_at`, `created_by`)
 VALUES (' Nov 11 ','Veterans Day','FEDERAL',CURDATE(),'DBA');
+
+
+INSERT INTO `person` (`name`,`email`,`mobile_number`,`password`,`role_id`,`created_at`, `created_by`)
+VALUES ('Admin','admin@email.com','8142099823','$2a$12$R2Z.p7OFwRHbrsG/aBykU.j2RPgbbAGPq16mBMbIF8q3IUsk5P9ZC', 1 ,CURDATE(),'DBA')
