@@ -29,11 +29,16 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         String password = authentication.getCredentials().toString();
         Person person = personRepository.readByEmail(email);
 
-        if (null != password && person.getPersonId() > 0 && password.equals(person.getPassword())) {
-            return new UsernamePasswordAuthenticationToken(person.getName(), null, getGrantedAuthorities(person.getRoles()));
-        } else {
+        if (person == null) {
             throw new BadCredentialsException("Invalid Credentials");
         }
+
+        if (password != null && password.equals(person.getPassword())) {
+            return new UsernamePasswordAuthenticationToken(
+                    person.getName(), null, getGrantedAuthorities(person.getRoles()));
+        }
+
+        throw new BadCredentialsException("Invalid Credentials");
     }
 
     private List<GrantedAuthority> getGrantedAuthorities(Roles roles) {

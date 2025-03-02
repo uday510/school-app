@@ -22,17 +22,16 @@ public class LoginController {
                                    @RequestParam(value = "register", required = false) String register,
                                    Model model) {
 
-        String errMsg = null;
+        String errorMessage = null;
         if (error != null) {
-            errMsg = "Invalid username and password!";
+            errorMessage = "Invalid username or password!";
         } else if (logout != null) {
-            errMsg = "You have been successfully logged out!";
+            errorMessage = "You have been successfully logged out!";
         } else if (register != null) {
-            errMsg = "Registration successful! Please login to continue!";
+            errorMessage = "Registration successful! Please login to continue!";
         }
 
-        model.addAttribute("errMsg", errMsg);
-
+        model.addAttribute("errorMessage", errorMessage);
         return "login.html";
     }
 
