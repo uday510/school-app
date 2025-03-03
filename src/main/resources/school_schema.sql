@@ -67,4 +67,23 @@ CREATE TABLE IF NOT EXISTS `person` (
     PRIMARY KEY (`person_id`),
     FOREIGN KEY (role_id) REFERENCES roles(role_id),
     FOREIGN KEY (address_id) REFERENCES address(address_id)
+    )
+
+CREATE TABLE IF NOT EXISTS `courses` (
+                                         `course_id` int NOT NULL AUTO_INCREMENT,
+                                         `name` varchar(100) NOT NULL,
+    `fees` varchar(10) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL,
+    `created_by` varchar(50) NOT NULL,
+    `updated_at` TIMESTAMP DEFAULT NULL,
+    `updated_by` varchar(50) DEFAULT NULL,
+    PRIMARY KEY (`course_id`)
+    );
+
+CREATE TABLE IF NOT EXISTS `person_courses` (
+                                                `person_id` int NOT NULL,
+                                                `course_id` int NOT NULL,
+                                                FOREIGN KEY (person_id) REFERENCES person(person_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id),
+    PRIMARY KEY (`person_id`,`course_id`)
     );
