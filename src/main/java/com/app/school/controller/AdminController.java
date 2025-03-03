@@ -185,4 +185,5 @@ public class AdminController {
         httpSession.setAttribute("courses", courses);
         return new ModelAndView("redirect:/admin/viewStudents?id="+courses.getCourseId());
     }
+
 }
