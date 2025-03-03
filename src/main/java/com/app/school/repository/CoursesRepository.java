@@ -18,8 +18,13 @@ public interface CoursesRepository extends JpaRepository<Courses, Integer> {
     @EntityGraph(attributePaths = {"persons"})
     Optional<Courses> findById(Integer id);
 
-
     @EntityGraph(attributePaths = {"persons"})
     @Query("SELECT c FROM Courses c WHERE c.courseId = :id")
     Optional<Courses> findByIdWithPersons(@Param("id") Integer id);
+
+
+    List<Courses> findByOrderByName();
+
+    List<Courses> findByOrderByNameDesc();
+
 }
