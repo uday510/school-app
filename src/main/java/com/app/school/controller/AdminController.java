@@ -8,6 +8,7 @@ import com.app.school.repository.CoursesRepository;
 import com.app.school.repository.PersonRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,10 +76,6 @@ public class AdminController {
 
             List<Person> personsCopy = new ArrayList<>(classroom.getPersons());
 
-            for (Person person : personsCopy) {
-                System.out.println(person.getName());
-            }
-
             modelAndView.addObject("classroom", classroom);
             modelAndView.addObject("persons", personsCopy);
             modelAndView.addObject("person", new Person());
@@ -145,13 +142,22 @@ public class AdminController {
     @GetMapping("/viewStudents")
     public ModelAndView viewStudents(Model model, @RequestParam int id, HttpSession httpSession, @RequestParam(required = false) String error) {
         ModelAndView modelAndView = new ModelAndView("course_students.html");
-        Optional<Courses> courses =  coursesRepository.findById(id);
-        modelAndView.addObject("courses", courses.get());
-        modelAndView.addObject("person", new Person());
-        httpSession.setAttribute("courses", courses.get());
+        System.out.println("ID " + id);
+
+        Optional<Courses> coursesOpt = coursesRepository.findByIdWithPersons(id);
+
+        if (coursesOpt.isPresent()) {
+            Courses course = coursesOpt.get();
+            modelAndView.addObject("courses", course);
+            modelAndView.addObject("person", new Person());
+            httpSession.setAttribute("courses", course);
+            System.out.println("LENGTH: " + course.getPersons().size());
+        }
+
         if (error != null) {
             modelAndView.addObject("errorMessage", "Invalid email address");
         }
+
         return modelAndView;
     }
 
@@ -176,7 +182,7 @@ public class AdminController {
     @GetMapping("/deleteStudentFromCourse")
     public ModelAndView deleteStudentFromCourse(Model model, @RequestParam int personId, HttpSession httpSession) {
         Courses courses = (Courses) httpSession.getAttribute("courses");
-        Optional<Person> person = personRepository.findById(personId);
+        Optional<Person> person = personRepository.findWithCoursesById(personId);
         person.ifPresent(personEntity -> {
             personEntity.getCourses().remove(courses);
         });
