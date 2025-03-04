@@ -22,7 +22,6 @@ public interface CoursesRepository extends JpaRepository<Courses, Integer> {
     @Query("SELECT c FROM Courses c WHERE c.courseId = :id")
     Optional<Courses> findByIdWithPersons(@Param("id") Integer id);
 
-
     List<Courses> findByOrderByName();
 
     List<Courses> findByOrderByNameDesc();

@@ -10,8 +10,28 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "contact_msg")
+@SqlResultSetMappings({
+        @SqlResultSetMapping(name = "SqlResultSetMapping.count", columns = @ColumnResult(name = "cnt"))
+})
+@NamedQueries({
+        @NamedQuery(name = "Contact.findOpenMsgs",
+                query = "SELECT c FROM Contact c WHERE c.status = :status"),
+        @NamedQuery(name = "Contact.updateMsgStatus",
+                query = "UPDATE Contact c SET c.status = ?1 WHERE c.contactId = ?2")
+})
+@NamedNativeQueries({
+        @NamedNativeQuery(name = "Contact.findOpenMsgsNative",
+                query = "SELECT * FROM contact_msg c WHERE c.status = :status",
+                resultClass = Contact.class),
+        @NamedNativeQuery(name = "Contact.findOpenMsgsNative.count",
+                query = "SELECT COUNT(*) AS cnt FROM contact_msg c WHERE c.status = :status",
+                resultSetMapping = "sqlResultSetMapping.count"
+        ),
+        @NamedNativeQuery(name = "Contact.updateMsgStatusNative",
+                query = "UPDATE contact_msg c SET c.status = ?1 WHERE c.contact_id = ?2"
+        )
+})
 public class Contact extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "contact_id")
@@ -38,5 +58,4 @@ public class Contact extends BaseEntity {
     private String message;
 
     private String status;
-
 }

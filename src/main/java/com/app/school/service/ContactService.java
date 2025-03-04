@@ -12,10 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
-
 @Service
 public class ContactService {
 
@@ -33,7 +29,7 @@ public class ContactService {
         Pageable pageable = PageRequest.of(pageNum - 1 , pageSize,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
 
-        return  contactRepository.findByStatus(SchoolConstants.OPEN, pageable);
+        return  contactRepository.findOpenMsgs(SchoolConstants.OPEN, pageable);
     }
 
     public void saveMessageDetails(Contact contact) {
@@ -42,6 +38,6 @@ public class ContactService {
     }
 
     public void updateMsgStatus(int id) {
-        contactRepository.updateStatusById(SchoolConstants.CLOSE, id);
+        contactRepository.updateMsgStatus(SchoolConstants.CLOSE, id);
     }
 }
