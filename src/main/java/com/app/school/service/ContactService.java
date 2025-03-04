@@ -42,11 +42,6 @@ public class ContactService {
     }
 
     public void updateMsgStatus(int id) {
-        Optional<Contact> contact = contactRepository.findById(id);
-        if (contact.isEmpty()) return;
-
-        Contact contact1 = contact.get();
-        contact1.setStatus(SchoolConstants.CLOSE);
-        contactRepository.save(contact1);
+        contactRepository.updateStatusById(SchoolConstants.CLOSE, id);
     }
 }
