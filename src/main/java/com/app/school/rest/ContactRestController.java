@@ -9,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +17,8 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/api/contact")
+@RequestMapping(path = "/api/contact", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+@CrossOrigin(origins = "*")
 public class ContactRestController {
 
     @Autowired
@@ -88,7 +86,6 @@ public class ContactRestController {
         response.setStatusCode("200");
         response.setStatusMessage("Message closed successfully");
         return ResponseEntity.status(HttpStatus.OK).body(response);
-
     }
 
 }
