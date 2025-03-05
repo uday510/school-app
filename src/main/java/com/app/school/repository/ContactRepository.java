@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Integer> {
@@ -33,4 +35,6 @@ public interface ContactRepository extends JpaRepository<Contact, Integer> {
     @Modifying
     @Query(nativeQuery = true)
     int updateMsgStatus(String status, int id);
+
+    List<Contact> findByStatus(String status);
 }

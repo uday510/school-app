@@ -14,16 +14,17 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf ->
+        return http.csrf(csrf ->
                                 csrf
                                 .ignoringRequestMatchers("/saveMsg")
                                 .ignoringRequestMatchers("/public/**")
+                                .ignoringRequestMatchers("/api/**")
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers( "/dashboard").authenticated()
                         .requestMatchers("/displayMessages/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/closeMsg/**").hasRole("ADMIN")
                         .requestMatchers("/displayProfile").authenticated()
                         .requestMatchers("/updateProfile").authenticated()
