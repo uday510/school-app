@@ -1,5 +1,6 @@
 package com.app.school.service;
 
+import com.app.school.config.SchoolProps;
 import com.app.school.constants.SchoolConstants;
 import com.app.school.model.Contact;
 import com.app.school.repository.ContactRepository;
@@ -18,6 +19,9 @@ public class ContactService {
     @Autowired
     private ContactRepository contactRepository;
 
+    @Autowired
+    SchoolProps schoolProps;
+
     public ContactService() {
         log.info("Contact Service Bean initialized");
     }
@@ -25,7 +29,10 @@ public class ContactService {
     private static final Logger log = LoggerFactory.getLogger(ContactService.class);
 
     public Page<Contact> findMsgsWithOpenStatus(int pageNum, String  sortField, String sortDir) {
-        int pageSize = 5;
+        int pageSize = schoolProps.getPageSize();
+        if (schoolProps.getContact() != null && schoolProps.getContact().get("pageSize") != null) {
+            pageSize = Integer.parseInt(schoolProps.getContact().get("pageSize").trim());
+        }
         Pageable pageable = PageRequest.of(pageNum - 1 , pageSize,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
 
