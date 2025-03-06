@@ -12,6 +12,7 @@
     <artifactId>school</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>school</name>
+    <packaging>jar</packaging>
     <description>school</description>
     <url/>
     <licenses>
