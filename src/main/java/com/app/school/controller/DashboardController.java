@@ -3,10 +3,10 @@ package com.app.school.controller;
 import com.app.school.model.Person;
 import com.app.school.repository.PersonRepository;
 import jakarta.servlet.http.HttpSession;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +28,9 @@ public class DashboardController {
     @Autowired
     private Environment environment;
 
+    @Value("${app.pageSize}")
+    private String defaultPageSize;
+
     @RequestMapping("/dashboard")
     public String displayDashboard(Model model, Authentication authentication, HttpSession session) {
         Person person = personRepository.readByEmail(authentication.getName());
@@ -39,27 +42,28 @@ public class DashboardController {
         }
 
         session.setAttribute("loggedInUser", person);
-
+        logMessages();
         return "dashboard.html";
-    }
-
-    private void logMessages() {
-        log.error("Error msg from Dashboard controller");
-        log.warn("Warn msg from Dashboard controller");
-        log.info("Info msg from Dashboard controller");
-        log.debug("Debug msg from Dashboard controller");
-        log.trace("Trace msg from Dashboard controller");
-
-        log.error("default pageSize " + pageSize);
-        log.error("default successMsg " + message);
-
-        log.info(environment.getProperty("school.app.pageSize"));
-        log.info(environment.getProperty("school.contact.successMessage"));
     }
 
     private void logProperties() {
         log.info(environment.getProperty("school.app.pageSize"));
         log.info(environment.getProperty("school.contact.successMessage"));
+    }
+
+    private void logMessages() {
+        log.error("Error message from the Dashboard Controller");
+        log.warn("Warn message from the Dashboard Controller");
+        log.info("Info message from the Dashboard Controller");
+        log.debug("Debug message from the Dashboard Controller");
+        log.trace("Trace message from the Dashboard Controller");
+
+        log.error("defaultPageSize value with @Value annotation is : " + defaultPageSize);
+        log.error("successMsg value with @Value annotation is : " + message);
+
+        log.error(environment.getProperty("app.pageSize"));
+        log.error(environment.getProperty("app.successMessage"));
+        log.error(environment.getProperty("JAVA_HOME"));
     }
 
 }

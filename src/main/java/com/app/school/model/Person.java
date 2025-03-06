@@ -2,6 +2,7 @@ package com.app.school.model;
 
 import com.app.school.annotation.FieldsValueMatch;
 import com.app.school.annotation.PasswordValidator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -54,6 +55,7 @@ public class Person extends BaseEntity {
     @NotBlank(message = "Password must not be blank")
     @Size(min = 5, message = "Password must be at least 5 characters long")
     @PasswordValidator
+    @JsonIgnore
     private String password;
 
     @NotBlank(message = "Confirm password must not be blank")
