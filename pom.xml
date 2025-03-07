@@ -124,6 +124,7 @@
 </dependencyManagement>
 
     <build>
+        <finalName>school-aws-deployment</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
